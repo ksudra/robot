@@ -31,6 +31,7 @@ policies, either expressed or implied, of the FreeBSD Project.
 
 #include <stdint.h>
 #include "msp.h"
+#include <stdio.h>
 
 // Check these if you really need to include these libraries in your code
 /*
@@ -109,116 +110,116 @@ void PORT4_IRQHandler(void){
         case 0x00: // Bump switch 1
 		
             // Change the coloured LED into green (backward)
-			
+			Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
-            
+            Motor_BackwardSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-            
+            Motor_StopSimple(1000);
 			// Change the coloured LED into yellow (turn left)
-            
+            Port2_Output(YELLOW);
             // Make a left turn at 500 duty for 100ms
-            
+            Motor_LeftSimple(500, 100);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-            
+            Motor_StopSimple(1000);
           break;
         case 0x00: // Bump switch 2
 		
             // Change the coloured LED into green (backward)
-			
+            Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
-            
+            Motor_BackwardSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-            
+            Motor_StopSimple(1000);
 			// Change the coloured LED into yellow (turn left)
-            
+            Port2_Output(YELLOW);
             // Make a left turn at 500 duty for 200ms
-            
+            Motor_LeftSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-			
+            Motor_StopSimple(1000);
           break;
         case 0x08: // Bump switch 3
 
             // Change the coloured LED into green (backward)
-			
+            Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
-            
+            Motor_BackwardSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-            
+            Motor_StopSimple(1000);
 			// Change the coloured LED into yellow (turn left)
-            
+            Port2_Output(YELLOW);
             // Make a left turn at 500 duty for 300ms
-            
+            Motor_LeftSimple(500, 300);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-			
+            Motor_StopSimple(1000);
           break;
         case 0x00: // Bump switch 4
 		
             // Change the coloured LED into green (backward)
-			
+            Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
-            
+            Motor_BackwardSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-            
+            Motor_StopSimple(1000);
 			// Change the coloured LED into blue (turn right)
-            
+            Port2_Output(BLUE);
             // Make a left turn at 500 duty for 300ms
-            
+            Motor_RightSimple(500, 300);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-			
+            Motor_StopSimple(1000);
           break;
         case 0x00: // Bump switch 5
 		
             // Change the coloured LED into green (backward)
-			
+            Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
-            
+            Motor_BackwardSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-            
+            Motor_StopSimple(1000);
 			// Change the coloured LED into blue (turn right)
-            
+            Port2_Output(BLUE);
             // Make a left turn at 500 duty for 200ms
-            
+            Motor_RightSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-			
+            Motor_StopSimple(1000);
           break;
         case 0x00: // Bump switch 6
 
             // Change the coloured LED into green (backward)
-			
+            Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
-            
+            Motor_BackwardSimple(500, 200);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-            
+            Motor_StopSimple(1000);
 			// Change the coloured LED into blue (turn right)
-            
+            Port2_Output(BLUE);
             // Make a left turn at 500 duty for 100ms
-            
+            Motor_RightSimple(500, 100);
 			// turn off the coloured LED
-            
+            Port2_Output(0);
             // Stop for 1000ms
-			
+            Motor_StopSimple(1000);
           break;
 
         case 0xED: // none of the switches are pressed
