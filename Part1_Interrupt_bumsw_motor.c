@@ -34,12 +34,12 @@ policies, either expressed or implied, of the FreeBSD Project.
 #include <stdio.h>
 
 // Check these if you really need to include these libraries in your code
-/*
-#include "../inc/Clock.h"
-#include "../inc/SysTick.h"
-#include "../inc/CortexM.h"
-#include "../inc/motor.h"
-*/
+
+#include "inc/Clock.h"
+#include "inc/SysTick.h"
+#include "inc/CortexM.h"
+#include "inc/motor.h"
+
 
 // Color    LED(s) Port2
 // dark     ---    0
@@ -76,6 +76,14 @@ void BumpEdgeTrigger_Init(void){
     NVIC->IP[9] = (NVIC->IP[9]&0xFF00FFFF)|0x00400000;
     // enable interrupt 38 in NVIC on port4
     NVIC->ISER[1] = 0x00000040;
+}
+
+void Port2_Output(uint8_t data){
+    // built-in red LED connected to P2.0
+    // built-in green LED connected to P2.1
+    // built-in blue LED connected to P2.2
+    // write three outputs bits of P2
+    P2->OUT = (P2->OUT&0xF8)|data;
 }
 
 // Uses P4IV IRQ handler to solve critical section/race
@@ -384,14 +392,6 @@ void Port2_Init(void){
     P2->DS |= 0x07;           // activate increased drive strength
     P2->OUT &= ~0x07;         // all LEDs off
     P2->DIR |= 0xC0;          // Direction of the motor
-}
-
-void Port2_Output(uint8_t data){
-    // built-in red LED connected to P2.0
-    // built-in green LED connected to P2.1
-    // built-in blue LED connected to P2.2
-    // write three outputs bits of P2
-    P2->OUT = (P2->OUT&0xF8)|data;
 }
 
 void Switch_Init(void){
