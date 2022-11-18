@@ -118,9 +118,11 @@ void PORT4_IRQHandler(void){
       switch(status){
 
         case 0x02: // Bump switch 1
+            if(mode == 1){
 
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
+
             // Move backward at 500 duty for 200ms
             Motor_BackwardSimple(500, 200);
             // turn off the coloured LED
@@ -135,9 +137,13 @@ void PORT4_IRQHandler(void){
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
-          break;
+                      }
+            else if(mode == 2){
+                Motor_StopSimple(5);
+            }
+            break;
         case 0x06: // Bump switch 2
-
+            if (mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -154,9 +160,13 @@ void PORT4_IRQHandler(void){
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
-          break;
+            }
+            else if (mode == 2) {
+                Motor_StopSimple(5);
+            }
+                      break;
         case 0x08: // Bump switch 3
-
+            if (mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -173,9 +183,13 @@ void PORT4_IRQHandler(void){
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+            }
+            else if (mode == 3){
+                Motor_StopSimple(5);
+            }
           break;
         case 0x0C: // Bump switch 4
-
+            if (mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -192,9 +206,13 @@ void PORT4_IRQHandler(void){
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+            }
+            else if (mode == 2){
+                Motor_StopSimple(5);
+            }
           break;
         case 0x0E: // Bump switch 5
-
+            if (mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -211,9 +229,13 @@ void PORT4_IRQHandler(void){
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+            }
+            else if (mode == 2){
+                Motor_StopSimple(5);
+            }
           break;
         case 0x10: // Bump switch 6
-
+            if (mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -230,7 +252,12 @@ void PORT4_IRQHandler(void){
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+            }
+            else if (mode == 2){
+                Motor_StopSimple(5);
+            }
           break;
+
 
         case 0xED: // none of the switches are pressed
           break;
@@ -263,6 +290,7 @@ void checkbumpswitch(uint8_t status)
     switch(status){
       //case 0x02: // Bump switch 1 (for interrupt vector)
         case 0x6D: // Bump 1
+        if(mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -279,9 +307,14 @@ void checkbumpswitch(uint8_t status)
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+        }
+        else if (mode == 2){
+            Motor_StopSimple(5);
+        }
         break;
       //case 0x06: // Bump switch 2 (for interrupt vector)
         case 0xAD: // Bump 2
+        if(mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -298,9 +331,14 @@ void checkbumpswitch(uint8_t status)
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+        }
+        else if (mode == 2){
+            Motor_StopSimple(5);
+        }
         break;
       //case 0x08: // Bump switch 3 (for interrupt vector)
         case 0xCD: // Bump 3
+        if(mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -317,9 +355,15 @@ void checkbumpswitch(uint8_t status)
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+        }
+        else if (mode ==2){
+            Motor_StopSimple(5);
+        }
         break;
       //case 0x0C: // Bump switch 4 (for interrupt vector)
         case 0xE5: // Bump 4
+        if(mode == 1){
+
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -336,9 +380,14 @@ void checkbumpswitch(uint8_t status)
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+        }
+        else if (mode == 2){
+            Motor_StopSimple(5);
+        }
         break;
       //case 0x0E: // Bump switch 5 (for interrupt vector)
         case 0xE9: // Bump 5
+        if (mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -355,9 +404,14 @@ void checkbumpswitch(uint8_t status)
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+        }
+        else if (mode == 2){
+            Motor_StopSimple(5);
+        }
         break;
       //case 0x10: // Bump switch 6 (for interrupt vector)
         case 0xEC: // Bump 6
+        if (mode == 1){
             // Change the coloured LED into green (backward)
             Port2_Output(GREEN);
             // Move backward at 500 duty for 200ms
@@ -374,6 +428,10 @@ void checkbumpswitch(uint8_t status)
             Port2_Output(0);
             // Stop for 1000ms
             Motor_StopSimple(1000);
+        }
+        else if (mode == 2){
+            Motor_StopSimple(5);
+        }
         break;
       case 0xED: // neither switch pressed
 
@@ -436,7 +494,7 @@ int main(void){
 //  while(1){
 
     // This section is used for Example 1 (section 5.8.1)
-    __no_operation();       // the code will run without operation
+//    __no_operation();       // the code will run without operation
 
     // This section is used for Example 2 (section 5.8.2)
     /*
@@ -458,11 +516,7 @@ int main(void){
             mode = 1;
             DisableInterrupts();
             REDLED = 0;
-            BumpEdgeTrigger_Init();
-            Port2_Init();
             Port2_Output(WHITE);
-            Motor_InitSimple();
-            Motor_StopSimple(1000);
             while (1) {
                 Port2_Output(WHITE);
                 Motor_ForwardSimple(500, 100);
@@ -476,11 +530,7 @@ int main(void){
             mode = 2;
             DisableInterrupts();
             REDLED = 0;
-            BumpEdgeTrigger_Init();
-            Port2_Init();
             Port2_Output(WHITE);
-            Motor_InitSimple();
-            Motor_StopSimple(1000);
             while (1) {
                 Motor_ForwardSimple(500, 500);
                 Motor_StopSimple(500);
