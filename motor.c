@@ -100,11 +100,11 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time_ms){
           // (1) turn on the PWM of both motors using OUT
           P2 -> OUT |= 0xC0;
           // (2) wait for 1us for the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // turn of the PWM of both motors
           P2->OUT &= ~0xC0;
           // (3) wait for 1us for another cycle from the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // (4) wait for 1ms using SysTick_Wait
           SysTick_Wait(48000);
     }
@@ -147,11 +147,11 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time_ms){
           // (1) turn on the PWM of both motors using OUT
           P2 -> OUT |= 0xC0;
           // (2) wait for 1us for the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // turn of the PWM of both motors
           P2->OUT &= ~0xC0;
           // (3) wait for 1us for another cycle from the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // (4) wait for 1ms using SysTick_Wait
           SysTick_Wait(48000);
     }
@@ -193,11 +193,11 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time_ms){
           // (1) turn on the PWM of both motors using OUT
           P2 -> OUT |= 0xC0;
           // (2) wait for 1us for the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // turn of the PWM of both motors
           P2->OUT &= ~0xC0;
           // (3) wait for 1us for another cycle from the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // (4) wait for 1ms using SysTick_Wait
           SysTick_Wait(48000);
     }
@@ -237,11 +237,11 @@ void Motor_RightSimple(uint16_t duty, uint32_t time_ms){
           // (1) turn on the PWM of both motors using OUT
           P2 -> OUT |= 0xC0;
           // (2) wait for 1us for the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // turn of the PWM of both motors
           P2->OUT &= ~0xC0;
           // (3) wait for 1us for another cycle from the duty
-          SysTick_Wait1us(L);
+          SysTick_Wait(L*48);
           // (4) wait for 1ms using SysTick_Wait
           SysTick_Wait(48000);
     }
