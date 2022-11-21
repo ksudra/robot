@@ -1,16 +1,13 @@
 /*
 Simplified BSD License (FreeBSD License)
 Copyright (c) 2017, Jonathan Valvano, All rights reserved.
-
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
-
 1. Redistributions of source code must retain the above copyright notice,
    this list of conditions and the following disclaimer.
 2. Redistributions in binary form must reproduce the above copyright notice,
    this list of conditions and the following disclaimer in the documentation
    and/or other materials provided with the distribution.
-
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
 AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
 IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -21,7 +18,6 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED
 AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
 USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 The views and conclusions contained in the software and documentation are
 those of the authors and should not be interpreted as representing official
 policies, either expressed or implied, of the FreeBSD Project.
@@ -72,34 +68,34 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time_ms){
     uint32_t i; // this i is used for the 'for loop' in section mtr_pwm_loop
     uint16_t L;
 
-	// The PWM has high (H) and low (L) cycle.
+    // The PWM has high (H) and low (L) cycle.
     L = 1000-duty; // PWM using H and L
-	
-	/*
-	  Section: mtr_dir_fwd
-	  Description: this section is used to perform forward direction of motors
-	  Port & pin : direction of the left and right motors
-	  Tips       : for both direction and output, '1' = forward, '0' = backward
-	  TODO       : finish this section
-	*/
-	// (1) Set the direction (DIR) for motor forward of the port
-	// 		For example: P?->DIR |= 0x??;
-	// Where P? is the port number and 0x?? is the pins that will be used
-    P1->DIR |= 0x00;
-	// (2) Set the output (OUT) of the port to run the motor
-	// 		For example: P?->OUT |= 0x??;
-    P1->OUT |= 0x00;
-	// Where P? is the port number and 0x?? is the pins that will be used
 
-	/*
-	  Section mtr_pwm_loop 
-	  Description: this section is used to turn on/off the motor
-	               using PWM of both motors by implementing the duty cycle
-	  Port & pin : PWM of the left and right motors
+    /*
+      Section: mtr_dir_fwd
+      Description: this section is used to perform forward direction of motors
+      Port & pin : direction of the left and right motors
+      Tips       : for both direction and output, '1' = forward, '0' = backward
       TODO       : finish this section
-	*/
-	
-	// use for loop here from 0 to time_ms, count every 1 step
+    */
+    // (1) Set the direction (DIR) for motor forward of the port
+    //      For example: P?->DIR |= 0x??;
+    // Where P? is the port number and 0x?? is the pins that will be used
+    P1->DIR |= 0x00;
+    // (2) Set the output (OUT) of the port to run the motor
+    //      For example: P?->OUT |= 0x??;
+    P1->OUT |= 0x00;
+    // Where P? is the port number and 0x?? is the pins that will be used
+
+    /*
+      Section mtr_pwm_loop
+      Description: this section is used to turn on/off the motor
+                   using PWM of both motors by implementing the duty cycle
+      Port & pin : PWM of the left and right motors
+      TODO       : finish this section
+    */
+
+    // use for loop here from 0 to time_ms, count every 1 step
     for (i=0; i<time_ms; i++){
           // (1) turn on the PWM of both motors using OUT
           P2 -> OUT |= 0xC0;
@@ -112,7 +108,7 @@ void Motor_ForwardSimple(uint16_t duty, uint32_t time_ms){
           // (4) wait for 1ms using SysTick_Wait
           SysTick_Wait(48000);
     }
-	  
+
 }
 
 void Motor_BackwardSimple(uint16_t duty, uint32_t time_ms){
@@ -120,33 +116,33 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time_ms){
     uint32_t i; // this i is used for the 'for loop' in section mtr_pwm_loop
     uint16_t L;
 
-	// The PWM has high (H) and low (L) cycle.
+    // The PWM has high (H) and low (L) cycle.
     L = 1000-duty; // PWM using H and L
-		
-	
-	/*
-	  Section: mtr_dir_bwd
-	  Description: this section is used to perform backward direction of motors
-	  Port & pin : direction of the left and right motors
-	  Tips       : for both direction and output, '1' = forward, '0' = backward
-	  TODO       : finish this section
-	*/
-	// (1) Set the direction (DIR) for motor forward of the port
-	// 		For example: P?->DIR |= 0x??;
-	// Where P? is the port number and 0x?? is the pins that will be used
+
+
+    /*
+      Section: mtr_dir_bwd
+      Description: this section is used to perform backward direction of motors
+      Port & pin : direction of the left and right motors
+      Tips       : for both direction and output, '1' = forward, '0' = backward
+      TODO       : finish this section
+    */
+    // (1) Set the direction (DIR) for motor forward of the port
+    //      For example: P?->DIR |= 0x??;
+    // Where P? is the port number and 0x?? is the pins that will be used
     P1->DIR |= 0xC0;
     // (2) Set the output (OUT) of the port to run the motor
     //      For example: P?->OUT |= 0x??;
     P1->OUT |= 0xC0;
-	/*
-	  Section mtr_pwm_loop 
-	  Description: this section is used to turn on/off the motor
-	               using PWM of both motors by implementing the duty cycle
-	  Port & pin : PWM of the left and right motors
+    /*
+      Section mtr_pwm_loop
+      Description: this section is used to turn on/off the motor
+                   using PWM of both motors by implementing the duty cycle
+      Port & pin : PWM of the left and right motors
       TODO       : finish this section
-	*/
-	
-	// use for loop here from 0 to time_ms, count every 1 step
+    */
+
+    // use for loop here from 0 to time_ms, count every 1 step
     for (i=0; i<time_ms; i++){
           // (1) turn on the PWM of both motors using OUT
           P2 -> OUT |= 0xC0;
@@ -159,7 +155,7 @@ void Motor_BackwardSimple(uint16_t duty, uint32_t time_ms){
           // (4) wait for 1ms using SysTick_Wait
           SysTick_Wait(48000);
     }
-	  
+
 }
 
 void Motor_LeftSimple(uint16_t duty, uint32_t time_ms){
@@ -167,32 +163,32 @@ void Motor_LeftSimple(uint16_t duty, uint32_t time_ms){
     uint32_t i; // this i is used for the 'for loop' in section mtr_pwm_loop
     uint16_t L;
 
-	// The PWM has high (H) and low (L) cycle.
+    // The PWM has high (H) and low (L) cycle.
     L = 1000-duty; // PWM using H and L
-	
-	/*
-	  Section: mtr_dir_lft
-	  Description: this section is used to turn left of motors
-	  Port & pin : direction of the left and right motors
-	  Tips       : for both direction and output, '1' = forward, '0' = backward
-	  TODO       : finish this section
-	*/
-	// (1) Set the direction (DIR) for motor forward of the port
-	// 		For example: P?->DIR |= 0x??;
-	// Where P? is the port number and 0x?? is the pins that will be used
+
+    /*
+      Section: mtr_dir_lft
+      Description: this section is used to turn left of motors
+      Port & pin : direction of the left and right motors
+      Tips       : for both direction and output, '1' = forward, '0' = backward
+      TODO       : finish this section
+    */
+    // (1) Set the direction (DIR) for motor forward of the port
+    //      For example: P?->DIR |= 0x??;
+    // Where P? is the port number and 0x?? is the pins that will be used
     P1->DIR |= 0x80;
     // (2) Set the output (OUT) of the port to run the motor
     //      For example: P?->OUT |= 0x??;
     P1->OUT |= 0x80;
-	/*
-	  Section mtr_pwm_loop 
-	  Description: this section is used to turn on/off the motor
-	               using PWM of both motors by implementing the duty cycle
-	  Port & pin : PWM of the left and right motors
+    /*
+      Section mtr_pwm_loop
+      Description: this section is used to turn on/off the motor
+                   using PWM of both motors by implementing the duty cycle
+      Port & pin : PWM of the left and right motors
       TODO       : finish this section
-	*/
-	
-	// use for loop here from 0 to time_ms, count every 1 step
+    */
+
+    // use for loop here from 0 to time_ms, count every 1 step
     for (i=0; i<time_ms; i++){
           // (1) turn on the PWM of both motors using OUT
           P2 -> OUT |= 0xC0;
@@ -211,42 +207,42 @@ void Motor_RightSimple(uint16_t duty, uint32_t time_ms){
     uint32_t i; // this i is used for the 'for loop' in section mtr_pwm_loop
     uint16_t L;
 
-	// The PWM has high (H) and low (L) cycle.
+    // The PWM has high (H) and low (L) cycle.
     L = 1000-duty; // PWM using H and L
-	
-	/*
-	  Section: mtr_dir_rgt
-	  Description: this section is used to turn right of motors
-	  Port & pin : direction of the left and right motors
-	  Tips       : for both direction and output, '1' = forward, '0' = backward
-	  TODO       : finish this section
-	*/
-	// (1) Set the direction (DIR) for motor forward of the port
-	// 		For example: P?->DIR |= 0x??;
-	// Where P? is the port number and 0x?? is the pins that will be used
+
+    /*
+      Section: mtr_dir_rgt
+      Description: this section is used to turn right of motors
+      Port & pin : direction of the left and right motors
+      Tips       : for both direction and output, '1' = forward, '0' = backward
+      TODO       : finish this section
+    */
+    // (1) Set the direction (DIR) for motor forward of the port
+    //      For example: P?->DIR |= 0x??;
+    // Where P? is the port number and 0x?? is the pins that will be used
     P1->DIR |= 0x40;
     // (2) Set the output (OUT) of the port to run the motor
     //      For example: P?->OUT |= 0x??;
     P1->OUT |= 0x40;
-	/*
-	  Section mtr_pwm_loop 
-	  Description: this section is used to turn on/off the motor
-	               using PWM of both motors by implementing the duty cycle
-	  Port & pin : PWM of the left and right motors
+    /*
+      Section mtr_pwm_loop
+      Description: this section is used to turn on/off the motor
+                   using PWM of both motors by implementing the duty cycle
+      Port & pin : PWM of the left and right motors
       TODO       : finish this section
-	*/
-	
-	// use for loop here from 0 to time_ms, count every 1 step
+    */
+
+    // use for loop here from 0 to time_ms, count every 1 step
     for (i=0; i<time_ms; i++){
-	  // (1) turn on the PWM of both motors using OUT
-	  P2 -> OUT |= 0xC0;
-	  // (2) wait for 1us for the duty
-      SysTick_Wait(48 * L);
-      // turn of the PWM of both motors
-	  P2->OUT &= ~0xC0;
-      // (3) wait for 1us for another cycle from the duty
-	  SysTick_Wait(48*L);
-	  // (4) wait for 1ms using SysTick_Wait
-	  SysTick_Wait(48000);
+          // (1) turn on the PWM of both motors using OUT
+          P2 -> OUT |= 0xC0;
+          // (2) wait for 1us for the duty
+          SysTick_Wait1us(L);
+          // turn of the PWM of both motors
+          P2->OUT &= ~0xC0;
+          // (3) wait for 1us for another cycle from the duty
+          SysTick_Wait1us(L);
+          // (4) wait for 1ms using SysTick_Wait
+          SysTick_Wait(48000);
     }
 }
