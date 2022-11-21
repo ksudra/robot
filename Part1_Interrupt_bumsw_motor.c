@@ -102,7 +102,6 @@ void PORT4_IRQHandler(void){
 
     // Interrupt Vector of Port4
       status = P4->IV;      // 2*(n+1) where n is highest priority
-
       // The case used are the interrupt vector of P4->IV
       // For example, the bump switch 3 is connected to P4.3
       // (in other words, Port 4 at pin 3),
@@ -470,8 +469,6 @@ void Switch_Init(void){
 #define REDLED (*((volatile uint8_t *)(0x42098040)))    // output: red LED
 
 int main(void){
-    uint8_t status;
-
   Clock_Init48MHz();        // Initialise clock with 48MHz frequency
   Switch_Init();            // Initialise switches
   SysTick_Init();           // Initialise SysTick timer
@@ -482,7 +479,6 @@ int main(void){
       if (SW1IN == 1)       mode = 1;
 
       else if (SW2IN == 1)  mode = 2;
-
   }
   REDLED = 0;               // Turn off the red LED
   BumpEdgeTrigger_Init();   // Initialise bump switches using edge interrupt
