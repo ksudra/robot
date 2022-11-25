@@ -511,6 +511,7 @@ int main(void){
 //        Motor_ForwardSimple(500, 1);
 
 //        if (mode == 1){
+//            uint8_t status;
 //            DisableInterrupts();
 //            REDLED = 0;
 //            Port2_Output(WHITE);
@@ -524,6 +525,7 @@ int main(void){
 //            }
 //        }
 //        else if (mode == 2){
+//            uint8_t status;
 //            DisableInterrupts();
 //            REDLED = 0;
 //            Port2_Output(WHITE);
