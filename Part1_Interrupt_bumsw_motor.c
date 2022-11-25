@@ -183,7 +183,7 @@ void PORT4_IRQHandler(void){
             // Stop for 1000ms
             Motor_StopSimple(100);
             }
-            else if (mode == 3){
+            else if (mode == 2){
                 Motor_StopSimple(500);
             }
           break;
