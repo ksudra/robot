@@ -509,7 +509,8 @@ int main(void){
         // in this case, the robot will move infinitely because of the while loop,
         // (although the time_ms used is 1)
 //        Motor_ForwardSimple(500, 1);
-
+     
+//        polling mode
 //        if (mode == 1){
 //            uint8_t status;
 //            DisableInterrupts();
@@ -549,7 +550,8 @@ int main(void){
 //            }
 //        }
 
-        if (mode == 1){
+//        interrupt mode 
+       if (mode == 1){
             REDLED = 0;
             while (1) {
                 Port2_Output(WHITE);
