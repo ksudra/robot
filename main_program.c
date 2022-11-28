@@ -303,12 +303,12 @@ static void taskReadInputSwitch( void *pvParameters ){
         ///////////////////////////////////////////////////////////
 
         if (i_SW1 == 1) {
-            //REDLED = 1;     // turn on the red LED
+            REDLED = 1;     // turn on the red LED
             // TODO: suspend the task taskHandle_PlaySong
             vTaskSuspend(taskHandle_PlaySong);
         }
         else {
-            //REDLED = 0;     // turn off the red LED
+            REDLED = 0;     // turn off the red LED
             // TODO: resume the task taskHandle_PlaySong
             vTaskResume(taskHandle_PlaySong);
         }
@@ -364,7 +364,7 @@ static void taskMasterThread( void *pvParameters )
 
     while(!SW2IN){                  // Wait for SW2 switch
         for (i=0; i<1000000; i++);  // Wait here waiting for command
-        //REDLED = !REDLED;           // The red LED is blinking
+        REDLED = !REDLED;           // The red LED is blinking
     }
 
     // TODO: Turn off the RED LED, we no longer need that.
@@ -384,6 +384,7 @@ static void taskMasterThread( void *pvParameters )
     //       Please suspend this task itself, or maybe just delete it.
     //       Question: what are the difference between 'suspend' the task,
     //                 or 'delete' the task?
+    vTaskSuspend(taskHandle_BlinkRedLED);
 }
 
 // TODO: create a static void function for taskdcMotor
