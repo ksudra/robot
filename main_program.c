@@ -305,49 +305,52 @@ static void taskReadInputSwitch( void *pvParameters ){
         if (i_SW1 == 1) {
             //REDLED = 1;     // turn on the red LED
             // TODO: suspend the task taskHandle_PlaySong
-
+            vTaskSuspend(taskHandle_PlaySong);
         }
         else {
             //REDLED = 0;     // turn off the red LED
             // TODO: resume the task taskHandle_PlaySong
-
+            vTaskResume(taskHandle_PlaySong);
         }
 
     }
 }
 
 // TODO: create a static void function for taskPlaySong
-
+static void taskPlaySong( void *pvParameters ){
     // TODO: initialise the song
-
+    init_song_pwm();
     // TODO: play the song's function and run forever
+    while (1){
+        play_song();
+    }
+}
 
 // TODO: create a static void function for taskBumpSwitch
+static void taskBumpSwitch( void *pvParameters ){
     // TODO: initialise bump switches
-
+    BumpSwitch_Init();
     // TODO: Read the input of bump switches forever:
     //       Continuously read the 6 bump switches in a loop,
     //       and return it to the "bumpSwitch_status" variable.
     //       Note that the bumpSwitch_status is a global variable,
     //       so do not declare it again here locally.
-    //for( ;; ) // uncomment this
-    //{ // uncomment this
-
-        // TODO: use bumpSwitch_status as the variable and
+    for( ;; )
+    {   // TODO: use bumpSwitch_status as the variable and
         //       use Bump_Read_Input to read the input
-
-    //} // uncomment this
+        bumpSwitch_status = Bump_Read_Input();
+    }
+}
 
 
 // TODO: create a static void function for taskDisplayOutputLED
-
-    //for( ;; ) // uncomment this
-    //{ // uncomment this
-
-        // TODO: use outputLED_response as the function and
+static void taskDisplayOutputLED (void *pvParameters){
+    for( ;; )
+    {   // TODO: use outputLED_response as the function and
         //       use bumpSwitch_status as the parameter
-
-    //} // uncomment this
+        outputLED_response(bumpSwitch_status);
+    }
+}
 
 // a static void function for taskMasterThread
 static void taskMasterThread( void *pvParameters )
@@ -365,6 +368,7 @@ static void taskMasterThread( void *pvParameters )
     }
 
     // TODO: Turn off the RED LED, we no longer need that.
+    REDLED = 0;
 
     //////////////////////////////////////////////////////////////////
     // TIP: to suspend a task, use vTaskSuspend in FreeRTOS
@@ -383,11 +387,14 @@ static void taskMasterThread( void *pvParameters )
 }
 
 // TODO: create a static void function for taskdcMotor
-
+static void taskdcMotor( void *pvParameters ){
     // TODO: initialise the DC Motor
-
+    dcMotor_Init();
     // TODO: use a polling that continuously read from the bumpSwitch_status,
     //       and run this forever in a while loop.
     //       use dcMotor_response and bumpSwitch_status for the parameter
-
+    while(1){
+        dcMotor_response(bumpSwitch_status);
+    }
+}
 
