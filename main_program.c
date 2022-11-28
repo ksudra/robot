@@ -113,7 +113,7 @@ void main_program( void )
     prvConfigureClocks();
 
     // TODO: initialise the switch
-    BumpSwitch_Init();
+    Switch_Init();
     // TODO: initialise systick timer
     SysTick_Init();
 
