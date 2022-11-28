@@ -358,7 +358,7 @@ static void taskMasterThread( void *pvParameters )
     int i;
 
     // TODO: initialise the color LED
-
+    ColorLED_Init();
     // initialise the red LED
     RedLED_Init();
 
