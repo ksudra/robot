@@ -81,8 +81,6 @@ static void taskPlaySong( void *pvParameters );
 static void taskdcMotor( void *pvParameters );
 // TODO: declare a static void function for a task called "taskReadInputSwitch"
 static void taskReadInputSwitch( void *pvParameters );
-// TODO: declare a static void function for a task called "taskdcMotor"
-static void taskdcMotor( void *pvParameters );
 // TODO: declare a static void function for a task called "taskDisplayOutputLED"
 static void taskDisplayOutputLED( void *pvParameters);
 /*
@@ -187,7 +185,7 @@ void main_program( void )
         //       pvParameters: NULL
         //       uxPriority: 1
         //       pxCreatedTask: taskHandle_InputSwitch
-    xTaskCreate(taskInputSwitch,
+    xTaskCreate(taskReadInputSwitch,
                 "TaskR",
                 128,
                 NULL,
@@ -201,7 +199,7 @@ void main_program( void )
         //       pvParameters: NULL
         //       uxPriority: 1
         //       pxCreatedTask: taskHandle_OutputLED
-    xTaskCreate(taskOutputLED,
+    xTaskCreate(taskDisplayOutputLED,
                 "TaskD",
                 128,
                 NULL,
@@ -398,4 +396,3 @@ static void taskdcMotor( void *pvParameters ){
         dcMotor_response(bumpSwitch_status);
     }
 }
-
