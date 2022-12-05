@@ -73,7 +73,7 @@ static void taskDisplayOutputLED( void *pvParameters);
 static void Port4_Init(void);
 static void BumpEdgeTrigger_Init(void);
 static void taskdcMotor_interrupt(void *pvParameters);
-static void taskInterrupt(void *pvParameters);
+//static void taskInterrupt(void *pvParameters);
 static void outputLED_ISR(unsigned char bumpSwitch_status);
 /*
  * Called by main() to create the main program application
@@ -164,12 +164,12 @@ void main_program( void )
                     1,
                     &taskHandle_dcMotorInterrupt);
 
-        xTaskCreate(taskInterrupt,
-                    "TaskI",
-                    128,
-                    NULL,
-                    1,
-                    &taskHandle_dcMotorInterrupt);
+//        xTaskCreate(taskInterrupt,
+//                    "TaskI",
+//                    128,
+//                    NULL,
+//                    1,
+//                    &taskHandle_dcMotorInterrupt);
     }
 
     vTaskStartScheduler();
@@ -336,16 +336,17 @@ void Port4_Init(void){
 }
 
 void PORT4_IRQHandler(void){
-    bumpSwitch_status = P4->IV;
-    BaseType_t xHigher;
-    xHigher = pdFALSE;
+    uint8_t status;
+    status = P4->IV;
+//    BaseType_t xHigher;
+//    xHigher = pdFALSE;
     P4->IFG &= ~0xED;
-    xSemaphoreGiveFromISR(xBSemaphore, &xHigher);
+//    xSemaphoreGiveFromISR(xBSemaphore, &xHigher);
+    outputLED_ISR(status);
+    dcMotor_response_interrupt(status);
 }
 
 void outputLED_ISR(unsigned char bumpSwitch_status){
-    //Since the value received form Interrupt is different from polling,
-    //another function have to be made
     int i;
     switch(bumpSwitch_status){
       case 0x02: // Bump switch 1
@@ -376,22 +377,23 @@ void outputLED_ISR(unsigned char bumpSwitch_status){
     Port2_Output2(COLOUROFF);
 }
 
-static void taskInterrupt(void *pvParamters){
-    EnableInterrupts();       // Clear the I bit
-    for ( ;; ){
-        xSemaphoreTake(xBSemaphore, portMAX_DELAY);
-        dcMotor_Stop(1);
-        vTaskSuspend(taskHandle_dcMotorInterrupt);
-        vTaskSuspend(taskHandle_PlaySong);
-        outputLED_ISR(bumpSwitch_status);
-        dcMotor_response_interrupt(bumpSwitch_status);
-        vTaskResume(taskHandle_PlaySong);
-        vTaskResume(taskHandle_dcMotorInterrupt);
-    }
-}
+//static void taskInterrupt(void *pvParamters){
+//    EnableInterrupts();       // Clear the I bit
+//    for ( ;; ){
+//        xSemaphoreTake(xBSemaphore, portMAX_DELAY);
+//        dcMotor_Stop(1);
+//        vTaskSuspend(taskHandle_dcMotorInterrupt);
+//        vTaskSuspend(taskHandle_PlaySong);
+//        outputLED_ISR(bumpSwitch_status);
+//        dcMotor_response_interrupt(bumpSwitch_status);
+//        vTaskResume(taskHandle_PlaySong);
+//        vTaskResume(taskHandle_dcMotorInterrupt);
+//    }
+//}
 
 static void taskdcMotor_interrupt(void *pvParameters){
     dcMotor_Init();
+    EnableInterrupts();
     for( ;; ) {
         dcMotor_Forward(500, 300);
         dcMotor_Stop(10);
