@@ -81,21 +81,6 @@ void dcMotor_Init(void){
     P2->DIR |= 0xC0;
 }
 
-void BumpEdgeTrigger_Init(void){
-    P4->SEL0 &= ~0xED;
-    P4->SEL1 &= ~0xED;      // configure as GPIO
-    P4->DIR &= ~0xED;       // make in
-    P4->REN |= 0xED;        // enable pull resistors
-    P4->OUT |= 0xED;        // pull-up
-    P4->IES |= 0xED;        // falling edge event
-    P4->IFG &= ~0xED;       // clear flag
-    P4->IE |= 0xED;         // arm the interrupt
-    // priority 2 on port4
-    NVIC->IP[9] = (NVIC->IP[9]&0xFF00FFFF)|0x00400000;
-    // enable interrupt 38 in NVIC on port4
-    NVIC->ISER[1] = 0x00000040;
-}
-
 // Function: dcMotor_Stop
 // Description: stop both motors for a specific amount of delay
 void dcMotor_Stop(uint32_t delay){
@@ -179,59 +164,50 @@ void dcMotor_Right(uint16_t duty, uint32_t period){
     }
 }
 
-void dcMotor_Pattern(void) {
-    dcMotor_Forward(500, 50);
-    dcMotor_Stop(50);
-    dcMotor_Left(500, 50);
-    dcMotor_Stop(50);
-}
-
 // Function: dcMotor_response
 // Description: the DC Motors will response based on the bump switches
-void dcMotor_response(void){
-    uint8_t status;
-    status = P4->IV;
+void dcMotor_response(unsigned char bumpSwitch_status){
 
-    switch(status){
-      case 0x02: // Bump switch 1
+    switch(bumpSwitch_status){
+      case 0xEC: // Bump switch 1
           dcMotor_Backward(500, 100);
           dcMotor_Stop(500);
           dcMotor_Left(500, 10);
           dcMotor_Stop(500);
         break;
-      case 0x06: // Bump switch 2
+      case 0xE9: // Bump switch 2
           dcMotor_Backward(500, 100);
           dcMotor_Stop(500);
           dcMotor_Left(500, 30);
           dcMotor_Stop(500);
         break;
-      case 0x08: // Bump switch 3
+      case 0xE5: // Bump switch 3
           dcMotor_Backward(500, 100);
           dcMotor_Stop(500);
           dcMotor_Left(500, 50);
           dcMotor_Stop(500);
         break;
-      case 0x0C: // Bump switch 4
+      case 0xCD: // Bump switch 4
           dcMotor_Backward(500, 100);
           dcMotor_Stop(500);
           dcMotor_Right(500, 50);
           dcMotor_Stop(500);
         break;
-      case 0x0E: // Bump switch 5
+      case 0xAD: // Bump switch 5
           dcMotor_Backward(500, 100);
           dcMotor_Stop(500);
           dcMotor_Right(500, 30);
           dcMotor_Stop(500);
         break;
-      case 0x10: // Bump switch 6
+      case 0x6D: // Bump switch 6
           dcMotor_Backward(500, 100);
           dcMotor_Stop(500);
           dcMotor_Right(500, 10);
           dcMotor_Stop(500);
         break;
-      case 0x00: // none of the bump switches are pressed
-//          dcMotor_Pattern();
+      case 0xED: // none of the bump switches are pressed
           dcMotor_Forward(500, 10);
+          //dcMotor_Stop(50);
         break;
       default: // when more than two bump switches are pressed
           dcMotor_Backward(500, 100);
@@ -239,5 +215,30 @@ void dcMotor_response(void){
           dcMotor_Right(500, 50);
           dcMotor_Stop(500);
     }
-    P4->IFG &= ~0xED;
+}
+
+void dcMotor_response_interrupt(unsigned char bumpSwitch_status){
+    switch(bumpSwitch_status){
+    case 0x02:
+        dcMotor_response(0xEC);
+        break;
+    case 0x06:
+        dcMotor_response(0xE9);
+        break;
+    case 0x08:
+        dcMotor_response(0xE5);
+        break;
+    case 0x0C:
+        dcMotor_response(0xCD);
+        break;
+    case 0x0E:
+        dcMotor_response(0xAD);
+        break;
+    case 0x10:
+        dcMotor_response(0x6D);
+        break;
+    case 0xED:
+        break;
+    default:
+    }
 }
