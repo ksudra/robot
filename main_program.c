@@ -73,7 +73,7 @@ static void taskDisplayOutputLED( void *pvParameters);
 static void Port4_Init(void);
 static void BumpEdgeTrigger_Init(void);
 static void taskdcMotor_interrupt(void *pvParameters);
-//static void taskInterrupt(void *pvParameters);
+static void taskInterrupt(void *pvParameters);
 static void outputLED_ISR(unsigned char bumpSwitch_status);
 /*
  * Called by main() to create the main program application
@@ -156,6 +156,7 @@ void main_program( void )
         xBSemaphore = xSemaphoreCreateBinary();
         Port4_Init();
         BumpEdgeTrigger_Init();
+        EnableInterrupts();
 
         xTaskCreate(taskdcMotor_interrupt,
                     "TaskM",
@@ -164,12 +165,12 @@ void main_program( void )
                     1,
                     &taskHandle_dcMotorInterrupt);
 
-//        xTaskCreate(taskInterrupt,
-//                    "TaskI",
-//                    128,
-//                    NULL,
-//                    1,
-//                    &taskHandle_dcMotorInterrupt);
+        xTaskCreate(taskInterrupt,
+                    "TaskI",
+                    128,
+                    NULL,
+                    2,
+                    &taskHandle_dcMotorInterrupt);
     }
 
     vTaskStartScheduler();
@@ -331,19 +332,17 @@ void Port4_Init(void){
     P4->DIR &= ~0xED;       // set as input
     P4->REN |= 0xED;        // enable pull resistors
     P4->OUT |= 0xED;        // set xx are pull-up
-    //see if it works?
     P4->IES |= 0xED;      // falling edge event
 }
 
 void PORT4_IRQHandler(void){
-    uint8_t status;
-    status = P4->IV;
-//    BaseType_t xHigher;
-//    xHigher = pdFALSE;
+    bumpSwitch_status = P4->IV;
+    BaseType_t xHigher;
+    xHigher = pdFALSE;
     P4->IFG &= ~0xED;
-//    xSemaphoreGiveFromISR(xBSemaphore, &xHigher);
-    outputLED_ISR(status);
-    dcMotor_response_interrupt(status);
+    xSemaphoreGiveFromISR(xBSemaphore, &xHigher);
+//    outputLED_ISR(status);
+//    dcMotor_response_interrupt(status);
 }
 
 void outputLED_ISR(unsigned char bumpSwitch_status){
@@ -377,24 +376,20 @@ void outputLED_ISR(unsigned char bumpSwitch_status){
     Port2_Output2(COLOUROFF);
 }
 
-//static void taskInterrupt(void *pvParamters){
+static void taskInterrupt(void *pvParamters){
 //    EnableInterrupts();       // Clear the I bit
-//    for ( ;; ){
-//        xSemaphoreTake(xBSemaphore, portMAX_DELAY);
-//        dcMotor_Stop(1);
-//        vTaskSuspend(taskHandle_dcMotorInterrupt);
-//        vTaskSuspend(taskHandle_PlaySong);
-//        outputLED_ISR(bumpSwitch_status);
-//        dcMotor_response_interrupt(bumpSwitch_status);
-//        vTaskResume(taskHandle_PlaySong);
-//        vTaskResume(taskHandle_dcMotorInterrupt);
-//    }
-//}
+    for( ;; ){
+        xSemaphoreTake(xBSemaphore, portMAX_DELAY);
+        outputLED_ISR(bumpSwitch_status);
+        dcMotor_response_interrupt(bumpSwitch_status);
+    }
+}
 
 static void taskdcMotor_interrupt(void *pvParameters){
-    dcMotor_Init();
-    EnableInterrupts();
+
+//    EnableInterrupts();
     for( ;; ) {
+        dcMotor_Init();
         dcMotor_Forward(500, 300);
         dcMotor_Stop(10);
         dcMotor_Left(500, 300);
