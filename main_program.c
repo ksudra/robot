@@ -378,8 +378,9 @@ void outputLED_ISR(unsigned char bumpSwitch_status){
 
 static void taskInterrupt(void *pvParamters){
 //    EnableInterrupts();       // Clear the I bit
+    BaseType_t xHigher;
     for( ;; ){
-        xSemaphoreTake(xBSemaphore, portMAX_DELAY);
+        xSemaphoreTakeFromISR(xBSemaphore, &xHigher);
         outputLED_ISR(bumpSwitch_status);
         dcMotor_response_interrupt(bumpSwitch_status);
     }
