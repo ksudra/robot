@@ -108,69 +108,25 @@ void main_program( void )
     Switch_Init();
     SysTick_Init();
 
-    xTaskCreate(taskMasterThread,
-                "TaskT",
-                128,
-                NULL,
-                2,
-                &taskHandle_BlinkRedLED);
 
-    xTaskCreate(taskPlaySong,
-                "TaskS",
-                128,
-                NULL,
-                1,
-                &taskHandle_PlaySong);
-
-    xTaskCreate(taskReadInputSwitch,
-                        "TaskR",
-                        128,
-                        NULL,
-                        1,
-                        &taskHandle_InputSwitch);
 
     if(mode == 0) {
-        xTaskCreate(taskBumpSwitch,
-                    "TaskB",
-                    128,
-                    NULL,
-                    1,
-                    &taskHandle_BumpSwitch);
-
-        xTaskCreate(taskdcMotor,
-                    "TaskM",
-                    128,
-                    NULL,
-                    1,
-                    &taskHandle_dcMotor);
-
-
-
-        xTaskCreate(taskDisplayOutputLED,
-                    "TaskD",
-                    128,
-                    NULL,
-                    1,
-                    &taskHandle_OutputLED);
+        xTaskCreate(taskMasterThread, "TaskT", 128, NULL, 2, &taskHandle_BlinkRedLED);
+        xTaskCreate(taskPlaySong, "TaskS", 128, NULL,  1, &taskHandle_PlaySong);
+        xTaskCreate(taskReadInputSwitch, "TaskR",  128, NULL, 1, &taskHandle_InputSwitch);
+        xTaskCreate(taskBumpSwitch, "TaskB", 128, NULL, 1, &taskHandle_BumpSwitch);
+        xTaskCreate(taskdcMotor,  "TaskM", 128, NULL, 1, &taskHandle_dcMotor);
+        xTaskCreate(taskDisplayOutputLED, "TaskD", 128, NULL, 1, &taskHandle_OutputLED);
     } else if(mode == 1) {
         xBSemaphore = xSemaphoreCreateBinary();
         Port4_Init();
         BumpEdgeTrigger_Init();
-        EnableInterrupts();
 
-        xTaskCreate(taskdcMotor_interrupt,
-                    "TaskM",
-                    128,
-                    NULL,
-                    1,
-                    &taskHandle_dcMotorInterrupt);
-
-        xTaskCreate(taskInterrupt,
-                    "TaskI",
-                    128,
-                    NULL,
-                    2,
-                    &taskHandle_dcMotorInterrupt);
+        xTaskCreate(taskMasterThread, "TaskT", 128, NULL, 2, &taskHandle_BlinkRedLED);
+        xTaskCreate(taskPlaySong, "TaskS", 128, NULL,  1, &taskHandle_PlaySong);
+        xTaskCreate(taskReadInputSwitch, "TaskR",  128, NULL, 1, &taskHandle_InputSwitch);
+        xTaskCreate(taskdcMotor_interrupt, "TaskM", 128, NULL, 1, &taskHandle_dcMotorInterrupt);
+        xTaskCreate(taskInterrupt, "TaskI", 128, NULL, 1, &taskHandle_dcMotorInterrupt);
     }
 
     vTaskStartScheduler();
@@ -341,8 +297,6 @@ void PORT4_IRQHandler(void){
     xHigher = pdFALSE;
     P4->IFG &= ~0xED;
     xSemaphoreGiveFromISR(xBSemaphore, &xHigher);
-//    outputLED_ISR(status);
-//    dcMotor_response_interrupt(status);
 }
 
 void outputLED_ISR(unsigned char bumpSwitch_status){
@@ -377,23 +331,26 @@ void outputLED_ISR(unsigned char bumpSwitch_status){
 }
 
 static void taskInterrupt(void *pvParamters){
-//    EnableInterrupts();       // Clear the I bit
-    BaseType_t xHigher;
-    for( ;; ){
-        xSemaphoreTakeFromISR(xBSemaphore, &xHigher);
-        outputLED_ISR(bumpSwitch_status);
-        dcMotor_response_interrupt(bumpSwitch_status);
+    EnableInterrupts();
+    for( ;; )
+    {
+        if(xBSemaphore != NULL) {
+            if(xSemaphoreTake(xBSemaphore, portMAX_DELAY) == pdTRUE) {
+                vTaskSuspend(taskHandle_dcMotorInterrupt);
+                dcMotor_response_interrupt(bumpSwitch_status);
+                vTaskDelay(1);
+                outputLED_ISR(bumpSwitch_status);
+                vTaskResume(taskHandle_dcMotorInterrupt);
+                vTaskDelay(1);
+            }
+        }
+
     }
 }
 
 static void taskdcMotor_interrupt(void *pvParameters){
-
-//    EnableInterrupts();
+    dcMotor_Init();
     for( ;; ) {
-        dcMotor_Init();
-        dcMotor_Forward(500, 300);
-        dcMotor_Stop(10);
-        dcMotor_Left(500, 300);
-        dcMotor_Stop(10);
+        dcMotor_Forward(300, 10);
     }
 }
