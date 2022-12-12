@@ -96,7 +96,6 @@ xTaskHandle taskHandle_dcMotorInterrupt;
 xTaskHandle taskHandle_Interrupt;
 
 int mode = 1;
-uint8_t stop = 0;
 
 void main_program( void )
 {
@@ -250,7 +249,7 @@ static void taskReadInputSwitch( void *pvParameters ){
     {
         if (SW1IN == 1) {
             i_SW1 ^= 1;                 // toggle the variable i_SW1
-            for (i=0; i<1000000; i++);  // this waiting loop is used
+            for (i=0; i<10000; i++);  // this waiting loop is used
                                         // to prevent the switch bounce.
         }
 
@@ -334,22 +333,20 @@ static void taskInterrupt(void *pvParamters){
     EnableInterrupts();
     for( ;; )
     {
-        if(xBSemaphore != NULL) {
-            if(xSemaphoreTake(xBSemaphore, portMAX_DELAY) == pdTRUE) {
-                vTaskSuspend(taskHandle_dcMotorInterrupt);
-                dcMotor_response_interrupt(bumpSwitch_status);
-                vTaskDelay(1);
-                outputLED_ISR(bumpSwitch_status);
-                vTaskResume(taskHandle_dcMotorInterrupt);
-                vTaskDelay(1);
-            }
-        }
-
+        xSemaphoreTake(xBSemaphore, portMAX_DELAY);
+        vTaskSuspend(taskHandle_dcMotorInterrupt);
+        dcMotor_response_interrupt(bumpSwitch_status);
+        vTaskDelay(1);
+        outputLED_ISR(bumpSwitch_status);
+        vTaskResume(taskHandle_dcMotorInterrupt);
+        vTaskDelay(1);
+        vTaskDelete(NULL);
     }
 }
 
 static void taskdcMotor_interrupt(void *pvParameters){
     dcMotor_Init();
+//    vTaskSuspend(taskHandle_Interrupt);
     for( ;; ) {
         dcMotor_Forward(300, 10);
     }
